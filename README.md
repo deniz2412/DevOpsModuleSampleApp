@@ -1,1 +1,1 @@
-Ovdje su exceptions i Testing assignmenti, HTTP assignment je u grani "webapp"
+Sample app from the Java module used for DevOps
