@@ -20,19 +20,19 @@ pipeline {
                     stages{
                         stage('Build'){
                             steps{
-                                bat 'Building the app in a Windows environment'
+                                bat 'echo Building the app in a Windows environment'
                             }
                         }
                         stage('Test'){
                             steps{
-                                bat 'Testing the app in a Windows environment'
+                                bat 'echo Testing the app in a Windows environment'
                             }
                         }
                         stage('Send to registry for deployment'){
                             steps{
-                                bat 'Generating Docker image'
+                                bat 'echo Generating Docker image'
                                 sleep(5)
-                                bat 'Sending the image to Dockerhub registry'
+                                bat 'echo Sending the image to Dockerhub registry'
                             }
                         }
                     }
