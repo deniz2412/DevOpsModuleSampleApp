@@ -13,7 +13,7 @@ pipeline {
                 git scm
             }
         }
-        stage('Build'){
+        stage('Build/Test/Bake'){
             parallel{
                 stage('Windows'){
                     //agent{label 'windows'} here we would specify an agent running a windows environment
@@ -36,8 +36,72 @@ pipeline {
                             }
                         }
                     }
-                
-                
+                }
+                stage('Linux'){
+                    //agent{label 'windows'} here we would specify an agent running a windows environment
+                    stages{
+                        stage('Build'){
+                            steps{
+                                bat 'echo Building the app in a Windows environment'
+                            }
+                        }
+                        stage('Test'){
+                            steps{
+                                bat 'echo Testing the app in a Windows environment'
+                            }
+                        }
+                        stage('Send to registry for deployment'){
+                            steps{
+                                bat 'echo Generating Docker image'
+                                sleep(5)
+                                bat 'echo Sending the image to Dockerhub registry'
+                            }
+                        }
+                    }
+                }
+                stage('MacOS'){
+                    //agent{label 'windows'} here we would specify an agent running a windows environment
+                    stages{
+                        stage('Build'){
+                            steps{
+                                bat 'echo Building the app in a Windows environment'
+                            }
+                        }
+                        stage('Test'){
+                            steps{
+                                bat 'echo Testing the app in a Windows environment'
+                            }
+                        }
+                        stage('Send to registry for deployment'){
+                            steps{
+                                bat 'echo Generating Docker image'
+                                sleep(5)
+                                bat 'echo Sending the image to Dockerhub registry'
+                            }
+                        }
+                    }
+                }
+                stage('CentOS'){
+                    //agent{label 'windows'} here we would specify an agent running a windows environment
+                    stages{
+                        stage('Build'){
+                            steps{
+                                bat 'echo Building the app in a Windows environment'
+                            }
+                        }
+                        stage('Test'){
+                            steps{
+                                bat 'echo Testing the app in a Windows environment'
+                            }
+                        }
+                        stage('Send to registry for deployment'){
+                            steps{
+                                bat 'echo Generating Docker image'
+                                sleep(5)
+                                bat 'echo Sending the image to Dockerhub registry'
+                            }
+                        }
+                    }
                 }
             }
 
