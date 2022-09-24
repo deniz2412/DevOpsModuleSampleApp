@@ -1,0 +1,50 @@
+pipeline {
+//Parallel sequential example, in cases where we need to build the app in different environments and then later test it
+//in the same there is no guarantee that the artifact will be tested in the same environment where it was built, hence 
+// we use a combination of sequential and parallel stages
+    agent any // We could put none here as the checkout happens at the start and will be individual for each parallel job
+    stages {
+        //Checkout main stage is not needed if we checkout the branch before 
+        stage('Checkout main') {
+            when{
+                branch "main"
+            }
+            steps {
+                git scm
+            }
+        }
+        stage('Build'){
+            parallel{
+                stage('Windows'){
+                    //agent{label 'windows'} here we would specify an agent running a windows environment
+                    stages{
+                        stage('Build'){
+                            steps{
+                                bat 'Building the app in a Windows environment'
+                            }
+                        }
+                        stage('Test'){
+                            steps{
+                                bat 'Testing the app in a Windows environment'
+                            }
+                        }
+                        stage('Send to registry for deployment'){
+                            steps{
+                                bat 'Generating Docker image'
+                                sleep(5)
+                                bat 'Sending the image to Dockerhub registry'
+                            }
+                        }
+                    }
+                
+                
+                }
+            }
+
+
+
+
+
+        }
+    }
+}
