@@ -11,6 +11,7 @@ pipeline {
             }
             steps {
                 git scm
+                echo "Checking main"
             }
         }
         stage('Build/Test/Bake'){
