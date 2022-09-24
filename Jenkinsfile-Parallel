@@ -95,7 +95,7 @@ pipeline {
                         stage('Build'){
                             steps{
                                 bat 'echo No label named CentOS'
-                                11<0
+                                sh '11<0'
                             }
                         }
                         stage('Test'){
