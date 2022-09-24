@@ -117,11 +117,7 @@ pipeline {
                     }
                 }
             }
-            post{
-                
 
-
-            }
         }
 
         stage('Timeout stage'){
@@ -130,7 +126,7 @@ pipeline {
             }
         }
 
-        stage('Deployment',propagate:false){
+        stage('Deployment'){
             failFast false
             parallel{
                 stage('Windows'){
