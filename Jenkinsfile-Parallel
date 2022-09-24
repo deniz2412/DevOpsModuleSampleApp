@@ -110,5 +110,74 @@ pipeline {
 
 
         }
+        stage('Deployment'){
+            steps{
+                echo "Pulling all the Docker Images from registry and deploying them"
+            }
+            parallel{
+                stage('Windows'){
+                    //agent{label 'windows'} here we would specify an agent running a windows environment
+                    stages{
+                        stage('Pull Image'){
+                            steps{
+                                bat 'echo Pulling image from dockerhub repo'
+                            }
+                        }
+                        stage('Deploying image'){
+                            steps{
+                                sleep(2)
+                                bat 'Deploying image to prod. server'
+                            }
+                        }
+                    }
+                }
+                stage('Linux'){
+                    stages{
+                        stage('Pull Image'){
+                            steps{
+                                bat 'echo Pulling image from dockerhub repo'
+                            }
+                        }
+                        stage('Deploying image'){
+                            steps{
+                                sleep(2)
+                                bat 'Deploying image to prod. server'
+                            }
+                        }
+                    }
+                }
+                stage('MacOS'){
+                    stages{
+                        stage('Pull Image'){
+                            steps{
+                                bat 'echo Pulling image from dockerhub repo'
+                            }
+                        }
+                        stage('Deploying image'){
+                            steps{
+                                sleep(2)
+                                bat 'Deploying image to prod. server'
+                            }
+                        }
+                    }
+                }
+                stage('CentOS'){
+                    stages{
+                        stage('Pull Image'){
+                            steps{
+                                bat 'echo Pulling image from dockerhub repo'
+                            }
+                        }
+                        stage('Deploying image'){
+                            steps{
+                                sleep(2)
+                                bat 'Deploying image to prod. server'
+                            }
+                        }
+                    }
+                }
+            }
+            }
+        }
     }
-}
+
