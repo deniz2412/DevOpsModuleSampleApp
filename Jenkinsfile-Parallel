@@ -111,9 +111,6 @@ pipeline {
 
         }
         stage('Deployment'){
-            steps{
-                echo "Pulling all the Docker Images from registry and deploying them"
-            }
             parallel{
                 stage('Windows'){
                     //agent{label 'windows'} here we would specify an agent running a windows environment
