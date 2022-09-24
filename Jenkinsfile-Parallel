@@ -16,9 +16,9 @@ pipeline {
             
         }
         stage('Build/Test/Delivery'){
-            failFast true
             //One edge case regarding failfast is that if a job in the pipeline fails but other jobs are still looking for a free node to start they will start
             //We need failfast in this stage as we cannot continue deploying a image without a good build and good tests
+            failFast true
             parallel{
                 stage('Windows'){
                     //agent{label 'windows'} here we would specify an agent running a windows environment
@@ -94,10 +94,8 @@ pipeline {
                     stages{
                         stage('Build'){
                             steps{
-                                catchError(buildResult: 'FAILED', stageResult: 'ABORTED') {
-                                error "No label named CentOS"
-                                }
-                                bat 'echo Building the app in a Windows environment'
+                                currentBuild.result = "FAILURE"
+                                bat 'echo No label named CentOS'
                             }
                         }
                         stage('Test'){
