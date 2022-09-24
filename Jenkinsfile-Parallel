@@ -94,7 +94,7 @@ pipeline {
                     stages{
                         stage('Build'){
                             steps{
-                                catchError(buildResult: 'UNSTABLE', stageResult: 'ABORTED') {
+                                catchError(buildResult: 'FAILED', stageResult: 'ABORTED') {
                                 error "No label named CentOS"
                                 }
                                 bat 'echo Building the app in a Windows environment'
