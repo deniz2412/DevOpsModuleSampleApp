@@ -15,7 +15,7 @@ pipeline {
             }
             
         }
-        stage('Build/Test/Bake'){
+        stage('Build/Test/Delivery'){
             failFast true
             //One edge case regarding failfast is that if a job in the pipeline fails but other jobs are still looking for a free node to start they will start
             //We need failfast in this stage as we cannot continue deploying a image without a good build and good tests
@@ -94,7 +94,7 @@ pipeline {
                     stages{
                         stage('Build'){
                             steps{
-                                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                                catchError(buildResult: 'UNSTABLE', stageResult: 'ABORTED') {
                                 error "No label named CentOS"
                                 }
                                 bat 'echo Building the app in a Windows environment'
