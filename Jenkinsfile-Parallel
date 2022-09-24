@@ -94,7 +94,7 @@ pipeline {
                     stages{
                         stage('Build'){
                             steps{
-                                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                                 error "No label named CentOS"
                                 }
                                 bat 'echo Building the app in a Windows environment'
@@ -116,12 +116,14 @@ pipeline {
                     }
                 }
             }
-
-
-
-
-
         }
+
+        stage('Timeout stage'){
+            steps{
+                sleep(10)
+            }
+        }
+
         stage('Deployment'){
             parallel{
                 stage('Windows'){
