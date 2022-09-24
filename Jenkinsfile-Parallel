@@ -94,8 +94,8 @@ pipeline {
                     stages{
                         stage('Build'){
                             steps{
-                                currentBuild.result = "FAILURE"
                                 bat 'echo No label named CentOS'
+                                currentBuild.setResult = "FAILURE"
                             }
                         }
                         stage('Test'){
