@@ -25,6 +25,7 @@ pipeline {
                     stages{
                         stage('Build'){
                             steps{
+                                sleep(5)
                                 bat 'echo Building the app in a Windows environment'
                             }
                         }
@@ -48,6 +49,7 @@ pipeline {
                     stages{
                         stage('Build'){
                             steps{
+                                sleep(5)
                                 bat 'echo Building the app in a Windows environment'
                             }
                         }
@@ -71,6 +73,7 @@ pipeline {
                     stages{
                         stage('Build'){
                             steps{
+                                sleep(5)
                                 bat 'echo Building the app in a Windows environment'
                             }
                         }
@@ -95,7 +98,7 @@ pipeline {
                         stage('Build'){
                             steps{
                                 bat 'echo No label named CentOS'
-                                sh '11<0'
+                                bat '11<0'
                             }
                         }
                         stage('Test'){
@@ -114,6 +117,11 @@ pipeline {
                     }
                 }
             }
+            post{
+                
+
+
+            }
         }
 
         stage('Timeout stage'){
@@ -122,7 +130,8 @@ pipeline {
             }
         }
 
-        stage('Deployment'){
+        stage('Deployment',propagate:false){
+            failFast false
             parallel{
                 stage('Windows'){
                     //agent{label 'windows'} here we would specify an agent running a windows environment
