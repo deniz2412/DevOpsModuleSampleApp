@@ -3,8 +3,9 @@
 
 ## Questions for mentor:
 - advantage of using SCM in stage vs as a pre stage action (outside of jenkinsfile)
-- Solving failfast edge case
+- Solving failfast edge case parallel
 - Notification sending in jenkinsfile vs pre stage config
+- Github Actions vs Webhook
 
 
 ## General idea for last assignment:
