@@ -1,8 +1,17 @@
 pipeline {
-//Parallel sequential example, in cases where we need to build the app in different environments and then later test it
-//in the same there is no guarantee that the artifact will be tested in the same environment where it was built, hence 
-// we use a combination of sequential and parallel stages
+    //Parallel sequential example, in cases where we need to build the app in different environments and then later test it
+    //in the same there is no guarantee that the artifact will be tested in the same environment where it was built, hence
+    // we use a combination of sequential and parallel stages
     agent any // We could put none here as the checkout happens at the start and will be individual for each parallel job
+    //We could put the Connector here or we can configuere it in the interface it (Find out the difference?)
+    //We can also put it in a stage to notify us of a specific stage complete
+    options {
+        office365ConnectorWebhooks([
+            [name: "Jenkins-Notifier", url: "${URL_WEBHOOK}", notifyBackToNormal: false, notifyFailure: true, notifyRepeatedFailure: false, notifySuccess: true, notifyAborted: true]
+        ])
+    }
+    
+    
     stages {
         //Checkout main stage is not needed if we checkout the branch before
         stage('Checkout main') {
@@ -11,54 +20,34 @@ pipeline {
                 branch "main"
             }*/
             steps {
-                echo "checkout main"
+                echo 'checkout main'
             }
-            
         }
-/*      Scripted pipeline works much better for parallel execution, code snippet below seems simpler and more efficient
-
-        def buildJob(jobName){
-            echo "${jobName} will be built."
-        }
-        node {
-        map = [:]
-        platforms = ['Windows', 'Ubuntu', 'MacOS','CentOS']
-
-        stage ('Build') {
-        for (platform in platforms) {
-            map[platform] = { buildJob("'${platform}'") }
-        }
-        parallel map
-        } 
-        }
-
-        A good use case would also be a nested parallel stage inside another stage which runs in parallel
-
-
-
-*/
-
-
-        stage('Build/Test/Delivery'){
+        stage('Build/Test/Delivery') {
             //One edge case regarding failfast is that if a job in the pipeline fails but other jobs are still looking for a free node to start they will start
             //We need failfast in this stage as we cannot continue deploying a image without a good build and good tests
             failFast true
-            parallel{
-                stage('Windows'){
+            parallel {
+                stage('Windows') {
                     //agent{label 'windows'} here we would specify an agent running a windows environment
-                    stages{
-                        stage('Build'){
-                            steps{
+                    stages {
+                        stage('Build') {
+                            steps {
+                                sleep(5)
                                 bat 'echo Building the app in a Windows environment'
+                                //It will let us know when its done successfully
+                                office365ConnectorSend webhookUrl: "${URL_WEBHOOK}",
+                                message: 'Windows environment is built',
+                                status: 'Success'
                             }
                         }
-                        stage('Test'){
-                            steps{
+                        stage('Test') {
+                            steps {
                                 bat 'echo Testing the app in a Windows environment'
                             }
                         }
-                        stage('Send to registry for deployment'){
-                            steps{
+                        stage('Send to registry for deployment') {
+                            steps {
                                 bat 'echo Generating Docker image'
                                 sleep(5)
                                 bat 'echo Sending the image to Dockerhub registry'
@@ -67,22 +56,22 @@ pipeline {
                         }
                     }
                 }
-                stage('Ubuntu'){
+                stage('Ubuntu') {
                     //agent{label 'ubuntu'} here we would specify an agent running a ubuntu environment
-                    stages{
-                        stage('Build'){
-                            steps{
+                    stages {
+                        stage('Build') {
+                            steps {
+                                sleep(5)
                                 bat 'echo Building the app in a Ubuntu environment'
                             }
                         }
-                        stage('Test'){         
-                            steps{
-                                bat 'echo Testing the app in a Ubuntu environment'   
+                        stage('Test') {
+                            steps {
+                                bat 'echo Testing the app in a Ubuntu environment'
                             }
-                           
                         }
-                        stage('Send to registry for deployment'){
-                            steps{
+                        stage('Send to registry for deployment') {
+                            steps {
                                 bat 'echo Generating Docker image'
                                 bat 'echo Sending the image to Dockerhub registry'
                                 bat "echo '${env.BUILD_TAG}' created and sent"
@@ -90,50 +79,50 @@ pipeline {
                         }
                     }
                 }
-                stage('MacOS'){
+                stage('MacOS') {
                     //agent{label 'mac'} here we would specify an agent running a macOS environment
-                    stages{
-                        stage('Build'){
-                            steps{
+                    stages {
+                        stage('Build') {
+                            steps {
+                                sleep(5)
                                 bat 'echo Building the app in a MacOS environment'
                             }
                         }
-                        stage('Test I'){
-                            steps{
+                        stage('Test') {
+                            steps {
                                 bat 'echo Testing the app in a MacOS environment'
                             }
                         }
-                        stage('Test II'){
-                            steps{
-                                bat 'echo Testing the app in a MacOS environment'
-                            }
-                        }
-                        stage('Send to registry for deployment'){
-                            steps{
+                        stage('Send to registry for deployment') {
+                            steps {
                                 bat 'echo Generating Docker image'
                                 sleep(5)
                                 bat 'echo Sending the image to Dockerhub registry'
-                                bat "echo '${env.BUILD_TAG}' created and sent"                            
+                                bat "echo '${env.BUILD_TAG}' created and sent"
                             }
                         }
                     }
                 }
-                stage('CentOS'){
+                stage('CentOS') {
                     //agent{label 'centos'} here we would specify an agent running a CentOS environment
-                    stages{
-                        stage('Build'){
-                            steps{
+                    stages {
+                        stage('Build') {
+                            steps {
                                 bat 'echo No label named CentOS'
-
+                                //Better approach to put it in a post block
+                                office365ConnectorSend webhookUrl: "${URL_WEBHOOK}",
+                                message: 'CentOS environment has failed to be built',
+                                status: 'Aborted'
+                                error('no label named CentOS')
                             }
                         }
-                        stage('Test'){
-                            steps{
+                        stage('Test') {
+                            steps {
                                 bat 'echo Testing the app in a CentOS environment'
                             }
                         }
-                        stage('Send to registry for deployment'){
-                            steps{
+                        stage('Send to registry for deployment') {
+                            steps {
                                 bat 'echo Generating Docker image'
                                 sleep(5)
                                 bat 'echo Sending the image to Dockerhub registry'
@@ -143,81 +132,80 @@ pipeline {
                     }
                 }
             }
-
         }
 
-        stage('Timeout stage'){
-            steps{
+        stage('Timeout stage') {
+            steps {
                 sleep(10)
             }
         }
 
-        stage('Deployment'){
+        stage('Deployment') {
             failFast false
-            parallel{
-                stage('Windows'){
+            parallel {
+                stage('Windows') {
                     //agent{label 'windows'} here we would specify an agent running a windows environment
-                    stages{
-                        stage('Pull Image'){
-                            steps{
+                    stages {
+                        stage('Pull Image') {
+                            steps {
                                 bat 'echo Pulling image from dockerhub repo'
                             }
                         }
-                        stage('Deploying image'){
-                            steps{
+                        stage('Deploying image') {
+                            steps {
                                 sleep(2)
                                 bat 'echo Deploying image to prod. server'
                             }
                         }
                     }
                 }
-                stage('Linux'){
-                    stages{
-                        stage('Pull Image'){
-                            steps{
+                stage('Linux') {
+                    stages {
+                        stage('Pull Image') {
+                            steps {
                                 bat 'echo Pulling image from dockerhub repo'
                             }
                         }
-                        stage('Deploying image'){
-                            steps{
+                        stage('Deploying image') {
+                            steps {
                                 sleep(2)
                                 bat 'echo Deploying image to prod. server'
                             }
                         }
                     }
                 }
-                stage('MacOS'){
-                    stages{
-                        stage('Pull Image'){
-                            steps{
+                stage('MacOS') {
+                    stages {
+                        stage('Pull Image') {
+                            steps {
                                 bat 'echo Pulling image from dockerhub repo'
                             }
                         }
-                        stage('Deploying image'){
-                            steps{
+                        stage('Deploying image') {
+                            steps {
                                 sleep(2)
                                 bat 'echo Deploying image to prod. server'
                             }
                         }
                     }
                 }
-                stage('CentOS'){
-                    stages{
-                        stage('Pull Image'){
-                            steps{
+                stage('CentOS') {
+                    stages {
+                        stage('Pull Image') {
+                            steps {
                                 bat 'echo Pulling image from dockerhub repo'
                             }
                         }
-                        stage('Deploying image'){
-                            steps{
+                        stage('Deploying image') {
+                            steps {
                                 sleep(2)
                                 bat 'echo Deploying image to prod. server'
                             }
                         }
                     }
                 }
-            }
             }
         }
     }
+}
 
