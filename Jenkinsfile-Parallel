@@ -18,6 +18,7 @@ pipeline {
         stage('Build/Test/Delivery'){
             //One edge case regarding failfast is that if a job in the pipeline fails but other jobs are still looking for a free node to start they will start
             //We need failfast in this stage as we cannot continue deploying a image without a good build and good tests
+            failFast true
             parallel{
                 stage('Windows'){
                     //agent{label 'windows'} here we would specify an agent running a windows environment
@@ -43,31 +44,16 @@ pipeline {
                     }
                 }
                 stage('Ubuntu'){
-                    //agent{label 'windows'} here we would specify an agent running a windows environment
+                    //agent{label 'ubuntu'} here we would specify an agent running a ubuntu environment
                     stages{
                         stage('Build'){
                             steps{
                                 bat 'echo Building the app in a Ubuntu environment'
                             }
                         }
-                        stage('Test'){
-                            parallel{
-                                failFast true
-                                stage("Test1"){
-                                    steps{
-                                        bat 'echo Testing the app in a Ubuntu environment'
-                                    }
-                                }
-                                stage("Test2"){
-                                    steps{
-                                        bat 'echo Testing the app in a Ubuntu environment'
-                                    }
-                                }
-                                stage("Test3"){
-                                    steps{
-                                        bat 'echo Testing the app in a Ubuntu environment'
-                                    }
-                                }
+                        stage('Test'){         
+                            steps{
+                                bat 'echo Testing the app in a Ubuntu environment'   
                             }
                            
                         }
@@ -81,16 +67,16 @@ pipeline {
                     }
                 }
                 stage('MacOS'){
-                    //agent{label 'windows'} here we would specify an agent running a windows environment
+                    //agent{label 'mac'} here we would specify an agent running a macOS environment
                     stages{
                         stage('Build'){
                             steps{
-                                bat 'echo Building the app in a Windows environment'
+                                bat 'echo Building the app in a MacOS environment'
                             }
                         }
                         stage('Test'){
                             steps{
-                                bat 'echo Testing the app in a Windows environment'
+                                bat 'echo Testing the app in a MacOS environment'
                             }
                         }
                         stage('Send to registry for deployment'){
@@ -104,7 +90,7 @@ pipeline {
                     }
                 }
                 stage('CentOS'){
-                    //agent{label 'windows'} here we would specify an agent running a windows environment
+                    //agent{label 'centos'} here we would specify an agent running a CentOS environment
                     stages{
                         stage('Build'){
                             steps{
@@ -114,7 +100,7 @@ pipeline {
                         }
                         stage('Test'){
                             steps{
-                                bat 'echo Testing the app in a Windows environment'
+                                bat 'echo Testing the app in a CentOS environment'
                             }
                         }
                         stage('Send to registry for deployment'){
