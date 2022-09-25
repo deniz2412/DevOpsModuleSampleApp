@@ -4,7 +4,7 @@ pipeline {
 // we use a combination of sequential and parallel stages
     agent any // We could put none here as the checkout happens at the start and will be individual for each parallel job
     parameters{
-        string(name: 'retry',defaultValue: '2',description: 'Number of retries')
+        string(name: 'retry',defaultValue: 2,description: 'Number of retries')
         choice(name: 'branches', choices: ['main', 'dev'], description: 'Which branch to execute the pipeline on')
     }
     options{
