@@ -6,6 +6,7 @@
 - Solving failfast edge case parallel
 - Notification sending in jenkinsfile vs pre stage config
 - Github Actions vs Webhook
+- Durability settings
 
 
 ## General idea for last assignment:
