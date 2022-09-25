@@ -15,7 +15,7 @@ pipeline {
         //Checkout main stage is not needed if we checkout the branch before
         stage('Checkout branch') {
             steps {
-                git(url: 'https://github.com/deniz2412/DevOpsModuleSampleApp.git', branch: "${params.branches}") ,
+                git(url: 'https://github.com/deniz2412/DevOpsModuleSampleApp.git', branch: "${params.branches}")
 
             }
             
