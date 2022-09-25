@@ -24,7 +24,6 @@ pipeline {
                     stages{
                         stage('Build'){
                             steps{
-                                sleep(5)
                                 bat 'echo Building the app in a Windows environment'
                             }
                         }
@@ -43,24 +42,38 @@ pipeline {
                         }
                     }
                 }
-                stage('Linux'){
+                stage('Ubuntu'){
                     //agent{label 'windows'} here we would specify an agent running a windows environment
                     stages{
                         stage('Build'){
                             steps{
-                                sleep(5)
-                                bat 'echo Building the app in a Windows environment'
+                                bat 'echo Building the app in a Ubuntu environment'
                             }
                         }
                         stage('Test'){
-                            steps{
-                                bat 'echo Testing the app in a Windows environment'
+                            parallel{
+                                failFast true
+                                stage("Test1"){
+                                    steps{
+                                        bat 'echo Testing the app in a Ubuntu environment'
+                                    }
+                                }
+                                stage("Test2"){
+                                    steps{
+                                        bat 'echo Testing the app in a Ubuntu environment'
+                                    }
+                                }
+                                stage("Test3"){
+                                    steps{
+                                        bat 'echo Testing the app in a Ubuntu environment'
+                                    }
+                                }
                             }
+                           
                         }
                         stage('Send to registry for deployment'){
                             steps{
                                 bat 'echo Generating Docker image'
-                                sleep(5)
                                 bat 'echo Sending the image to Dockerhub registry'
                                 bat "echo '${env.BUILD_TAG}' created and sent"
                             }
@@ -72,7 +85,6 @@ pipeline {
                     stages{
                         stage('Build'){
                             steps{
-                                sleep(5)
                                 bat 'echo Building the app in a Windows environment'
                             }
                         }
@@ -97,7 +109,7 @@ pipeline {
                         stage('Build'){
                             steps{
                                 bat 'echo No label named CentOS'
-                                error("No label named CentOS")
+
                             }
                         }
                         stage('Test'){
