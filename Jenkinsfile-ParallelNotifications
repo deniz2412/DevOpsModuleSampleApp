@@ -24,20 +24,20 @@ pipeline {
                     stages {
                         stage('Build') {
                             steps {
-                                bat 'echo Building the app in a Windows environment'
+                                sh 'echo Building the app in a Windows environment'
                             }
                         }
                         stage('Test') {
                             steps {
-                                bat 'echo Testing the app in a Windows environment'
+                                sh 'echo Testing the app in a Windows environment'
                             }
                         }
                         stage('Send to registry for deployment') {
                             steps {
-                                bat 'echo Generating Docker image'
+                                sh 'echo Generating Docker image'
                                 sleep(5)
-                                bat 'echo Sending the image to Dockerhub registry'
-                                bat "echo '${env.BUILD_TAG}' created and sent"
+                                sh 'echo Sending the image to Dockerhub registry'
+                                sh "echo '${env.BUILD_TAG}' created and sent"
                             }
                         }
                     }
@@ -47,19 +47,19 @@ pipeline {
                     stages {
                         stage('Build') {
                             steps {
-                                bat 'echo Building the app in a Ubuntu environment'
+                                sh 'echo Building the app in a Ubuntu environment'
                             }
                         }
                         stage('Test') {
                             steps {
-                                bat 'echo Testing the app in a Ubuntu environment'
+                                sh 'echo Testing the app in a Ubuntu environment'
                             }
                         }
                         stage('Send to registry for deployment') {
                             steps {
-                                bat 'echo Generating Docker image'
-                                bat 'echo Sending the image to Dockerhub registry'
-                                bat "echo '${env.BUILD_TAG}' created and sent"
+                                sh 'echo Generating Docker image'
+                                sh 'echo Sending the image to Dockerhub registry'
+                                sh "echo '${env.BUILD_TAG}' created and sent"
                             }
                         }
                     }
@@ -69,20 +69,20 @@ pipeline {
                     stages {
                         stage('Build') {
                             steps {
-                                bat 'echo Building the app in a MacOS environment'
+                                sh 'echo Building the app in a MacOS environment'
                             }
                         }
                         stage('Test') {
                             steps {
-                                bat 'echo Testing the app in a MacOS environment'
+                                sh 'echo Testing the app in a MacOS environment'
                             }
                         }
                         stage('Send to registry for deployment') {
                             steps {
-                                bat 'echo Generating Docker image'
+                                sh 'echo Generating Docker image'
                                 sleep(5)
-                                bat 'echo Sending the image to Dockerhub registry'
-                                bat "echo '${env.BUILD_TAG}' created and sent"
+                                sh 'echo Sending the image to Dockerhub registry'
+                                sh "echo '${env.BUILD_TAG}' created and sent"
                             }
                         }
                     }
@@ -92,20 +92,20 @@ pipeline {
                     stages {
                         stage('Build') {
                             steps {
-                                bat 'echo No label named CentOS'
+                                sh 'echo No label named CentOS'
                             }
                         }
                         stage('Test') {
                             steps {
-                                bat 'echo Testing the app in a CentOS environment'
+                                sh 'echo Testing the app in a CentOS environment'
                             }
                         }
                         stage('Send to registry for deployment') {
                             steps {
-                                bat 'echo Generating Docker image'
+                                sh 'echo Generating Docker image'
                                 sleep(5)
-                                bat 'echo Sending the image to Dockerhub registry'
-                                bat "echo '${env.BUILD_TAG}' created and sent"
+                                sh 'echo Sending the image to Dockerhub registry'
+                                sh "echo '${env.BUILD_TAG}' created and sent"
                             }
                         }
                     }
@@ -127,13 +127,13 @@ pipeline {
                     stages {
                         stage('Pull Image') {
                             steps {
-                                bat 'echo Pulling image from dockerhub repo'
+                                sh 'echo Pulling image from dockerhub repo'
                             }
                         }
                         stage('Deploying image') {
                             steps {
                                 sleep(2)
-                                bat 'echo Deploying image to prod. server'
+                                sh 'echo Deploying image to prod. server'
                             }
                         }
                     }
@@ -142,13 +142,13 @@ pipeline {
                     stages {
                         stage('Pull Image') {
                             steps {
-                                bat 'echo Pulling image from dockerhub repo'
+                                sh 'echo Pulling image from dockerhub repo'
                             }
                         }
                         stage('Deploying image') {
                             steps {
                                 sleep(2)
-                                bat 'echo Deploying image to prod. server'
+                                sh 'echo Deploying image to prod. server'
                             }
                         }
                     }
@@ -157,13 +157,13 @@ pipeline {
                     stages {
                         stage('Pull Image') {
                             steps {
-                                bat 'echo Pulling image from dockerhub repo'
+                                sh 'echo Pulling image from dockerhub repo'
                             }
                         }
                         stage('Deploying image') {
                             steps {
                                 sleep(2)
-                                bat 'echo Deploying image to prod. server'
+                                sh 'echo Deploying image to prod. server'
                             }
                         }
                     }
@@ -172,13 +172,13 @@ pipeline {
                     stages {
                         stage('Pull Image') {
                             steps {
-                                bat 'echo Pulling image from dockerhub repo'
+                                sh 'echo Pulling image from dockerhub repo'
                             }
                         }
                         stage('Deploying image') {
                             steps {
                                 sleep(2)
-                                bat 'echo Deploying image to prod. server'
+                                sh 'echo Deploying image to prod. server'
                             }
                         }
                     }
