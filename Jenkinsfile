@@ -2,29 +2,15 @@ pipeline {
     agent any
 
     stages {
-        stage('Build Main') {
-            when{
-                branch "main"
-            }
+        stage('Checkout branch') {
             steps {
-                echo 'Build main and only main'
+                git(
+                    url: 'git@github.com:deniz2412/DevOpsModuleSampleApp.git',
+                    credentialsId: 'GitDeniz',
+                    branch: "$branch"
+                    )
+                echo 'Branch $branch checked'
             }
         }
-        stage("Testing Main"){
-            when{
-                branch "main"
-            }
-            parallel{
-            steps{
-                echo "Testing"
-            
-            }
-
-            }
-
-           
-
-        }
-
     }
 }
