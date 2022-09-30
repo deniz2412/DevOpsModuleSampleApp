@@ -38,7 +38,7 @@ pipeline {
         }
         stage('Build and test'){
             stages{
-                stage('Enviroment check'){
+                stage('Environment check'){
                     steps{
                         sh '''
                             echo "PATH = ${PATH}"
